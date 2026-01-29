@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DOCTOR
+  STAFF
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  PARTIAL
+  CANCELLED
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password_hash String
+  role          Role
+  full_name     String
+  phone         String
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  doctor             Doctor?
+  staff              Staff?
+  appointments       Appointment[]
+  invoices           Invoice[]
+
+  @@map("users")
+}
+
+model Patient {
+  id                String   @id @default(uuid())
+  patient_id        String   @unique
+  full_name         String
+  date_of_birth     DateTime
+  gender            Gender
+  blood_group       String?
+  phone             String
+  email             String?
+  address           String?
+  emergency_contact String?
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  appointments   Appointment[]
+  medical_records MedicalRecord[]
+  invoices       Invoice[]
+
+  @@map("patients")
+}
+
+model Doctor {
+  id               String   @id @default(uuid())
+  user_id          String   @unique
+  doctor_id        String   @unique
+  specialization   String
+  qualification    String
+  license_number   String
+  consultation_fee Float
+  available_days   String[]
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  user            User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  appointments    Appointment[]
+  medical_records MedicalRecord[]
+
+  @@map("doctors")
+}
+
+model Staff {
+  id         String   @id @default(uuid())
+  user_id    String   @unique
+  staff_id   String   @unique
+  department String
+  position   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("staff")
+}
+
+model Appointment {
+  id                 String            @id @default(uuid())
+  appointment_number String            @unique
+  patient_id         String
+  doctor_id          String
+  appointment_date   DateTime
+  appointment_time   String
+  status             AppointmentStatus @default(SCHEDULED)
+  reason             String?
+  notes              String?
+  created_by         String
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+
+  patient         Patient         @relation(fields: [patient_id], references: [id])
+  doctor          Doctor          @relation(fields: [doctor_id], references: [id])
+  created_by_user User            @relation(fields: [created_by], references: [id])
+  medical_records MedicalRecord[]
+  invoices        Invoice[]
+
+  @@map("appointments")
+}
+
+model MedicalRecord {
+  id              String   @id @default(uuid())
+  patient_id      String
+  doctor_id       String
+  appointment_id  String?
+  visit_date      DateTime
+  chief_complaint String
+  diagnosis       String
+  notes           String?
+  prescriptions   Json
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  patient     Patient      @relation(fields: [patient_id], references: [id])
+  doctor      Doctor       @relation(fields: [doctor_id], references: [id])
+  appointment Appointment? @relation(fields: [appointment_id], references: [id])
+
+  @@map("medical_records")
+}
+
+model Invoice {
+  id                String        @id @default(uuid())
+  invoice_number    String        @unique
+  patient_id        String
+  appointment_id    String?
+  total_amount      Float
+  paid_amount       Float         @default(0)
+  status            InvoiceStatus @default(PENDING)
+  items             Json
+  payment_method    String?
+  payment_date      DateTime?
+  created_by        String
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+
+  patient         Patient      @relation(fields: [patient_id], references: [id])
+  appointment     Appointment? @relation(fields: [appointment_id], references: [id])
+  created_by_user User         @relation(fields: [created_by], references: [id])
+
+  @@map("invoices")
+}

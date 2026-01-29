@@ -1,0 +1,153 @@
+╔════════════════════════════════════════════════════════════════╗
+║                    🏥 PULSE OS - QUICK REFERENCE               ║
+╚════════════════════════════════════════════════════════════════╝
+
+📍 ACCESS URLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Frontend:  http://localhost:5173
+  Backend:   http://localhost:3000
+  Database:  localhost:5432
+
+👤 TEST CREDENTIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Admin:   admin@pulseos.com / admin123
+  Doctor:  dr.smith@pulseos.com / doctor123
+  Staff:   staff@pulseos.com / staff123
+
+🚀 START/STOP COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Start All:          ./start.sh
+  Stop All:           Press Ctrl+C
+  
+  Manual Start:
+    Terminal 1:       cd backend && npm run dev
+    Terminal 2:       cd frontend && npm run dev
+  
+  Database:
+    Start:            docker-compose up -d
+    Stop:             docker-compose down
+    View Data:        cd backend && npm run prisma:studio
+
+✅ WHAT'S WORKING (45% MVP Complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ✓ Authentication (Login/Logout)
+  ✓ Role-Based Access Control
+  ✓ Beautiful Dashboard
+  ✓ Sidebar Navigation
+  ✓ Patient Management (Full CRUD)
+     - List, Search, Create, Edit, Delete
+  ✓ Doctor Management (Backend Complete)
+  ✓ Database with 7 tables
+  ✓ 13 API Endpoints
+
+🚧 TODO (To Complete MVP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ☐ Doctor Frontend Pages
+  ☐ Staff Management
+  ☐ Appointment Booking System
+  ☐ Medical Records (EHR)
+  ☐ Billing & Invoicing
+  ☐ Dashboard with Real Data
+  ☐ Testing & Bug Fixes
+
+📊 API ENDPOINTS (13 Total)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Auth (4):
+    POST   /api/auth/login
+    POST   /api/auth/logout
+    GET    /api/auth/me
+    POST   /api/auth/refresh
+  
+  Patients (5):
+    GET    /api/patients
+    POST   /api/patients
+    GET    /api/patients/:id
+    PUT    /api/patients/:id
+    DELETE /api/patients/:id
+  
+  Doctors (4):
+    GET    /api/doctors
+    POST   /api/doctors
+    GET    /api/doctors/:id
+    PUT    /api/doctors/:id
+
+🧪 QUICK TEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # Test Backend
+  curl http://localhost:3000/health
+  
+  # Test Login
+  curl -X POST http://localhost:3000/api/auth/login \
+    -H "Content-Type: application/json" \
+    -d '{"email":"admin@pulseos.com","password":"admin123"}'
+
+📁 KEY FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  README.md                    - Project overview
+  SETUP_GUIDE.md               - Complete setup instructions
+  STATUS.md                    - Current status
+  IMPLEMENTATION_STATUS.md     - What's done & what's next
+  MVP_BUILD_SUMMARY.md         - Comprehensive build summary
+  start.sh                     - One-command startup
+  test-connection.html         - Visual API tester
+
+🎯 TYPICAL WORKFLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. Run ./start.sh
+  2. Open http://localhost:5173
+  3. Login as admin@pulseos.com / admin123
+  4. Navigate to "Patients" in sidebar
+  5. Click "Register Patient" button
+  6. Fill form and submit
+  7. See patient in list
+  8. Try edit/delete actions
+
+🐛 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Port Conflict:
+    lsof -ti:3000 | xargs kill -9
+    lsof -ti:5173 | xargs kill -9
+  
+  Database Issues:
+    docker-compose down
+    docker-compose up -d
+    sleep 5
+  
+  Module Errors:
+    cd backend && rm -rf node_modules && npm install
+    cd frontend && rm -rf node_modules .vite && npm install
+  
+  Clear Cache:
+    Browser: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Win)
+    Vite: rm -rf frontend/node_modules/.vite
+
+💡 DEVELOPMENT TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  • Use Patient module as template for new modules
+  • Backend pattern: controller → routes → index.ts
+  • Frontend pattern: service → page component → App.tsx
+  • Always restart backend after route changes
+  • Frontend has hot reload (no restart needed)
+  • Check browser console (F12) for errors
+  • Check terminal output for API errors
+
+📚 DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Architecture:      See MVP_BUILD_SUMMARY.md
+  Setup Guide:       See SETUP_GUIDE.md
+  API Reference:     See IMPLEMENTATION_STATUS.md
+  Database Schema:   backend/prisma/schema.prisma
+  Environment:       backend/.env, frontend/.env
+
+🎉 NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. Implement Doctor frontend (copy from Patients)
+  2. Build Appointments module (most critical)
+  3. Add Medical Records
+  4. Create Billing system
+  5. Polish and test
+
+╔════════════════════════════════════════════════════════════════╗
+║  System is running and ready for development! 🚀               ║
+║  Open http://localhost:5173 to see your work!                  ║
+╚════════════════════════════════════════════════════════════════╝
