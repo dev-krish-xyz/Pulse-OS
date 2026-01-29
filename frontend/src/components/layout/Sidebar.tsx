@@ -11,6 +11,7 @@ import {
   UserCog,
   LogOut,
   Activity,
+  ChevronRight,
 } from 'lucide-react';
 
 interface NavItem {
@@ -44,18 +45,33 @@ export default function Sidebar() {
     item.roles.includes(user?.role as Role)
   );
 
+  const getRoleBadgeColor = () => {
+    switch (user?.role) {
+      case Role.ADMIN:
+        return 'bg-blue-50 text-blue-600';
+      case Role.DOCTOR:
+        return 'bg-emerald-50 text-emerald-600';
+      case Role.STAFF:
+        return 'bg-violet-50 text-violet-600';
+      default:
+        return 'bg-slate-100 text-slate-600';
+    }
+  };
+
   return (
-    <div className="flex flex-col h-full bg-white border-r border-gray-200">
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
-        <div className="w-10 h-10 bg-primary-500 rounded-lg flex items-center justify-center">
-          <Activity className="w-6 h-6 text-white" />
+    <div className="flex flex-col h-full bg-white border-r border-slate-200">
+      {/* Logo */}
+      <Link to="/" className="flex items-center gap-3 px-5 py-5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+        <div className="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center">
+          <Activity className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Pulse OS</h1>
-          <p className="text-xs text-gray-500">Hospital Management</p>
+          <h1 className="text-base font-semibold text-slate-900">Pulse OS</h1>
+          <p className="text-[11px] text-slate-500">Healthcare Platform</p>
         </div>
-      </div>
+      </Link>
 
+      {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         {filteredNavigation.map((item) => {
           const isActive = location.pathname === item.path;
@@ -66,41 +82,46 @@ export default function Sidebar() {
               key={item.path}
               to={item.path}
               className={`
-                flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                ${
-                  isActive
-                    ? 'bg-primary-50 text-primary-700'
-                    : 'text-gray-700 hover:bg-gray-100'
+                group flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
+                ${isActive
+                  ? 'bg-slate-900 text-white'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }
               `}
             >
-              <Icon className="w-5 h-5" />
-              <span>{item.name}</span>
+              <div className="flex items-center gap-3">
+                <Icon className={`w-[18px] h-[18px] ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                <span>{item.name}</span>
+              </div>
+              {isActive && <ChevronRight className="w-4 h-4 text-slate-400" />}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center gap-3 px-3 py-2 mb-2">
-          <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-            <span className="text-sm font-medium text-gray-600">
+      {/* User Section */}
+      <div className="p-3 border-t border-slate-100">
+        <div className="flex items-center gap-3 px-3 py-3 bg-slate-50 rounded-xl mb-2">
+          <div className="w-9 h-9 bg-slate-200 rounded-lg flex items-center justify-center">
+            <span className="text-sm font-semibold text-slate-600">
               {user?.full_name?.charAt(0).toUpperCase()}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-medium text-slate-900 truncate">
               {user?.full_name}
             </p>
-            <p className="text-xs text-gray-500">{user?.role}</p>
+            <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${getRoleBadgeColor()}`}>
+              {user?.role}
+            </span>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-all duration-200"
         >
-          <LogOut className="w-5 h-5" />
-          <span>Logout</span>
+          <LogOut className="w-[18px] h-[18px]" />
+          <span>Sign Out</span>
         </button>
       </div>
     </div>

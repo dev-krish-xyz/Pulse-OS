@@ -105,10 +105,6 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
 
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
-      include: {
-        doctor: true,
-        staff: true,
-      },
       select: {
         id: true,
         email: true,

@@ -29,8 +29,10 @@ export interface User {
   email: string;
   role: Role;
   full_name: string;
-  phone: string;
-  is_active: boolean;
+  phone?: string;
+  is_active?: boolean;
+  doctor?: Doctor;
+  staff?: Staff;
 }
 
 export interface Patient {
